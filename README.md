@@ -1,10 +1,13 @@
 # infra
+
 What is is?
+
 This repo explains how to schedule Kubernetes infrastructure workloads on infra nodes by using lables taints and tolerations.
 Specifically, it describes how to place ODF, Cluster-Logging, Monitoring stack and router all togethers on the infra nodes.
 It consists of a step by step procedure (see solution.yaml) along with the relevant yaml files.
 
 Why?
+
 1. In order to isolate infrastructure workloads and allow application to be schedule independently on worker nodes
 2. In case of using OpenShift, placing infrastructure workloads in infra nodes saves subscription costs as well as isolation.
 
