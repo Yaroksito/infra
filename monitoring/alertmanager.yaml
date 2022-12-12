@@ -1,0 +1,58 @@
+global:
+  resolve_timeout: 5m
+inhibit_rules:
+  - equal:
+      - namespace
+      - alertname
+    source_matchers:
+      - severity = critical
+    target_matchers:
+      - severity =~ warning|info
+  - equal:
+      - namespace
+      - alertname
+    source_matchers:
+      - severity = warning
+    target_matchers:
+      - severity = info
+receivers:
+  - name: Default
+  - name: Watchdog
+  - name: Critical
+  - name: Xpoplog
+    webhook_configs:
+      - url: 'http://10.70.57.74:30303/logeye/api/logger.jsp?token=514c75f4-b79e-4ccf-9818-ac1c8dce9213'
+  - name: bpmmonitor
+    email_configs:
+      - to: bpmmonitor@mac.org.il
+        from: shobocp@mac.org.il
+        smarthost: "email-relay.mac.org.il:25"
+        hello: shobmon
+  - name: xpolog
+    webhook_configs:
+      - url: 'http://10.70.57.74:30303'
+route:
+  group_by:
+    - namespace
+  group_interval: 5m
+  group_wait: 30s
+  receiver: Default
+  repeat_interval: 12h
+  routes:
+    - matchers:
+        - alertname = Watchdog
+      receiver: Watchdog
+    - matchers:
+        - severity = critical
+      receiver: Critical
+    - receiver: Xpoplog
+      match_re:
+        critical: severity=critical
+        Default: All (default receiver)
+        Watchdog: alertname=Watchdog
+    - receiver: bpmmonitor
+      match:
+        owner: ocp
+    - receiver: xpolog
+      match_re:
+        critical: severity=critical
