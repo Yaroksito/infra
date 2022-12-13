@@ -16,6 +16,9 @@ Why?
 1. In order to isolate infrastructure workloads and allow application to be schedule independently on worker nodes
 2. In case of using OpenShift, placing infrastructure workloads in infra nodes saves subscription costs as well as isolation.
 
+Note:
+The apply sequence is important for the infra workloads will be scheduled successfully
+
 Refrences:
 1. Infrastructure nodes in OpenShift 4 
 https://access.redhat.com/solutions/5034771
